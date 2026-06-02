@@ -97,6 +97,9 @@
         .map-table td.cell-storage {
             cursor: pointer;
         }
+        .map-table td.cell-table {
+            cursor: pointer;
+        }
         .map-table td:hover {
             filter: brightness(0.9);
             transform: scale(0.98);
@@ -112,6 +115,7 @@
         .cell-otk { background-color: #FF0000; }
         .cell-storage { background-color: #FFFF00; }
         .cell-exit { background-color: #6c757d; }
+        .cell-table { background-color: #864d0b; }
 
         .status-badge {
             font-size: 0.7rem;
@@ -124,6 +128,10 @@
         }
         .cell-storage .status-badge {
             background: rgba(0,0,0,0.7);
+            color: white;
+        }
+        .cell-table .status-badge {
+            background: rgba(255,255,255,0.3);
             color: white;
         }
         .toolbar {
@@ -244,6 +252,7 @@
         <span><div class="color-box" style="background:#FFFF00;"></div> Склад / Стеллажи</span>
         <span><div class="color-box" style="background:#adb5bd;"></div> Проход / Выход / Станок</span>
         <span><div class="color-box" style="background:#008000;"></div> Рабочее место</span>
+        <span><div class="color-box" style="background:#864d0b;"></div> Стол</span>
     </div>
     <div class="toolbar">
         <div><strong>при клике на ячейку информация</strong></div>
@@ -254,7 +263,6 @@
     </div>
 
     <table class="map-table" id="mapTable">
-        <!-- РЯД 1 -->
         <tr>
             <td id="cell_lvj" class="cell-storage">ЛВЖ</td>
             <td id="cell_shelving_main" class="cell-storage">палеты</td>
@@ -270,12 +278,11 @@
             <td id="cell_operator1" class="cell-workstation">оператор</td>
             <td id="cell_storage_wall" class="cell-storage">стен.хранения</td>
         </tr>
-        <!-- РЯД 2 -->
         <tr>
             <td rowspan="2" id="cell_work1" class="cell-workstation">Рабочий 1</td>
             <td rowspan="2" id="cell_machine1" class="cell-machine">Станок 1</td>
-            <td id="cell_sold3" class="cell-workstation">Рабочее место</td>
-            <td id="cell_sold4" class="cell-workstation">Рабочее место</td>
+            <td id="cell_table3" class="cell-table">стол</td>
+            <td id="cell_sold4" class="cell-table">стол</td>
             <td rowspan="2" id="cell_sold6_1" class="cell-soldering">стол</td>
             <td rowspan="5" colspan="1" id="cell_passage_vertical2" class="cell-passage">проход</td>
             <td rowspan="2" id="cell_storage_rack1" class="cell-storage">стелаж</td>
@@ -284,35 +291,30 @@
             <td rowspan="2" id="cell_operator2" class="cell-workstation">оператор</td>
             <td rowspan="2" id="cell_storage_stand" class="cell-storage">стенд хранения</td>
         </tr>
-        <!-- РЯД 3 -->
         <tr>
             <td colspan="2" id="cell_conveyor2" class="cell-soldering">конвеер</td>
             <td id="cell_workplace1" class="cell-workstation">Рабочее место</td>
             <td id="cell_workplace2" class="cell-workstation">Рабочее место</td>
         </tr>
-        <!-- РЯД 4 -->
         <tr>
             <td colspan="13" id="cell_passage_horizontal" class="cell-passage"></td>
         </tr>
-        <!-- РЯД 5 -->
         <tr>
-           <td rowspan="2" id="cell_work2" class="cell-workstation">Рабочий 1</td>
-            <td rowspan="2" id="cell_machine2" class="cell-machine">Станок 1</td>
+           <td rowspan="2" id="cell_work2" class="cell-workstation">Рабочий 2</td>
+            <td rowspan="2" id="cell_machine2" class="cell-machine">Станок 2</td>
             <td id="cell_workplace3" class="cell-workstation">Рабочее место</td>
             <td id="cell_workplace4" class="cell-workstation">Рабочее место</td>
-            <td rowspan="2" id="cell_sold8" class="cell-soldering">стол</td>
-            <td rowspan="2" id="cell_sold9" class="cell-soldering">стол</td>
+            <td rowspan="2" id="cell_sold8" class="cell-table">стол</td>
+            <td rowspan="2" id="cell_sold9" class="cell-table">стол</td>
             <td colspan="2" id="cell_conveyor3" class="cell-soldering">конвеер</td>
             <td rowspan="2" id="cell_operator3" class="cell-workstation">оператор</td>
             <td rowspan="2" colspan="2" id="cell_passage_vertical3" class="cell-passage">проход</td>
         </tr>
-        <!-- РЯД 6 -->
         <tr>
             <td colspan="2" id="cell_conveyor4" class="cell-soldering">конвеер</td>
             <td id="cell_workplace5" class="cell-workstation">Рабочее место</td>
             <td id="cell_workplace6" class="cell-workstation">Рабочее место</td>
         </tr>
-        <!-- РЯД 7 -->
          <tr>
            <td rowspan="2" colspan="2" id="cell_room" class="cell-soldering">комната деда</td>
            <td id="cell_otk1" class="cell-otk">ОТК</td>
@@ -325,21 +327,17 @@
             <td rowspan="2" colspan="2" id="cell_room_jenya" class="cell-soldering">Женя</td>
             <td rowspan="2" colspan="2" id="cell_passage_vertical6" class="cell-passage">проход</td>
         </tr>
-        <!-- РЯД 8 -->
         <tr>
             <td id="cell_otk5" class="cell-otk">ОТК</td>
             <td id="cell_otk6" class="cell-otk">OTK</td>
             <td id="cell_otk7" class="cell-otk">ОТК</td>
             <td id="cell_otk8" class="cell-otk">ОТК</td>
         </tr>
-        <!-- РЯД 9 -->
          <tr>
             <td id="cell_exit" class="cell-exit">ВЫХОД</td>
             <td colspan="15" id="cell_passage_vertical7" class="cell-passage">проход</td>
         </tr>
     </table>
-
-    <div style="font-size:0.7rem; text-align:center; margin-top:10px;">Режим правки: можно менять статусы, размеры ячеек и пр. Быстрая отметка доступна всегда.</div>
 </div>
 
 <div id="modal" class="modal">
@@ -351,18 +349,16 @@
         <div><strong>Последние 3 события:</strong></div>
         <div id="modalEvents" class="event-list">—</div>
 
-        <!-- БЫСТРАЯ ОТМЕТКА (доступна всегда, без режима правки) -->
         <div id="quickPanel" class="quick-panel">
             <label><strong>✏ Быстрая отметка:</strong></label>
             <input type="text" id="quickFio" placeholder="Ваше ФИО">
-            <input type="text" id="quickReason" placeholder="Причина / событие (например: поломка, сел работать)">
+            <input type="text" id="quickReason" placeholder="Причина / событие">
             <button id="quickSaveBtn" class="btn-save">✔ Отметиться</button>
         </div>
 
-        <!-- ПАНЕЛЬ РЕДАКТИРОВАНИЯ (только в режиме правки) -->
         <div id="editPanel" style="display: none;">
             <div class="edit-panel">
-                <label>Ответственный (изменить):</label>
+                <label>Ответственный:</label>
                 <input type="text" id="responsibleInput" placeholder="ФИО ответственного" value="">
                 <button id="saveResponsibleBtn" class="btn-save">Сохранить ответственного</button>
                 <hr>
@@ -378,8 +374,6 @@
                 <button id="saveStatusBtn" class="btn-save">Сохранить статус</button>
                 <hr>
                 <button id="deleteEventsBtn" class="btn-danger">Очистить все события</button>
-
-                <!-- Настройка размеров ячейки (только в режиме правки) -->
                 <hr>
                 <label><strong>📐 Размеры ячейки (px):</strong></label>
                 <input type="number" id="cellWidth" placeholder="Ширина (px)">
@@ -394,60 +388,60 @@
 
 <script>
     const defaultData = {
-        cell_lvj: { name: "ЛВЖ (горючие материалы)", responsible: "Кладовщик Петров", status: "работает", events: ["25.05-проверка", "20.05-опись", "15.05-замена тары"], canEdit: true, cellStyle: {} },
-        cell_shelving_main: { name: "Стеллаж основной", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение", "18.05-инвентаризация", "12.05-уборка"], canEdit: true, cellStyle: {} },
+        cell_lvj: { name: "ЛВЖ", responsible: "Кладовщик Петров", status: "работает", events: ["25.05-проверка"], canEdit: true, cellStyle: {} },
+        cell_shelving_main: { name: "палеты", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение"], canEdit: true, cellStyle: {} },
         cell_passage_vertical: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_pallets1: { name: "Палеты", responsible: "Логист", status: "работает", events: ["26.05-приход", "22.05-перемещение", "16.05-учет"], canEdit: true, cellStyle: {} },
-        cell_pallets2: { name: "Палеты", responsible: "Логист", status: "работает", events: ["26.05-приход", "22.05-перемещение", "16.05-учет"], canEdit: true, cellStyle: {} },
-        cell_pallets3: { name: "Палеты", responsible: "Логист", status: "работает", events: ["26.05-приход", "22.05-перемещение", "16.05-учет"], canEdit: true, cellStyle: {} },
-        cell_pallets4: { name: "Палеты", responsible: "Логист", status: "работает", events: ["26.05-приход", "22.05-перемещение", "16.05-учет"], canEdit: true, cellStyle: {} },
-        cell_pallets5: { name: "Палеты", responsible: "Логист", status: "работает", events: ["26.05-приход", "22.05-перемещение", "16.05-учет"], canEdit: true, cellStyle: {} },
-        cell_pallets6: { name: "Палеты", responsible: "Логист", status: "работает", events: ["26.05-приход", "22.05-перемещение", "16.05-учет"], canEdit: true, cellStyle: {} },
-        cell_pallets7: { name: "Палеты", responsible: "Логист", status: "работает", events: ["26.05-приход", "22.05-перемещение", "16.05-учет"], canEdit: true, cellStyle: {} },
-        cell_sold1: { name: "Паяльный стол 1", responsible: "Иванов И.И.", status: "работает", events: ["19.05-калибровка", "12.05-замена жала", "04.05-чистка"], canEdit: true, cellStyle: {} },
-        cell_operator1: { name: "Оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена", "15.05-инструктаж", "10.05-проверка"], canEdit: true, cellStyle: {} },
-        cell_storage_wall: { name: "Стена хранения", responsible: "Кладовщик", status: "работает", events: ["22.05-пополнение", "18.05-уборка", "12.05-инвентаризация"], canEdit: true, cellStyle: {} },
-        cell_work1: { name: "Рабочий 1", responsible: "Иванов И.И.", status: "работает", events: ["02.05-компьютер", "28.04-настройка", "—"], canEdit: true, cellStyle: {} },
-        cell_machine1: { name: "Станок 1", responsible: "Иванов И.И.", status: "не работает", events: ["03.05-замена сверла", "25.04-ремонт", "—"], canEdit: true, cellStyle: {} },
-        cell_sold3: { name: "Паяльный стол 3", responsible: "Не закреплен", status: "не работает", events: ["05.05-неисправность", "01.05-ожидание запчастей"], canEdit: true, cellStyle: {} },
-        cell_sold4: { name: "Паяльный стол 4", responsible: "Иванов И.И.", status: "работает", events: ["16.05-обновление ПО", "10.05-замена платы", "02.05-калибровка"], canEdit: true, cellStyle: {} },
-        cell_sold6_1: { name: "Паяльный стол 6", responsible: "Не закреплен", status: "не закреплен", events: ["—", "—", "—"], canEdit: true, cellStyle: {} },
+        cell_pallets1: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
+        cell_pallets2: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
+        cell_pallets3: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
+        cell_pallets4: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
+        cell_pallets5: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
+        cell_pallets6: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
+        cell_pallets7: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
+        cell_sold1: { name: "раб. место |станок|", responsible: "Иванов И.И.", status: "работает", events: ["19.05-калибровка"], canEdit: true, cellStyle: {} },
+        cell_operator1: { name: "оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена"], canEdit: true, cellStyle: {} },
+        cell_storage_wall: { name: "стен.хранения", responsible: "Кладовщик", status: "работает", events: ["22.05-пополнение"], canEdit: true, cellStyle: {} },
+        cell_work1: { name: "Рабочий 1", responsible: "Иванов И.И.", status: "работает", events: ["02.05-компьютер"], canEdit: true, cellStyle: {} },
+        cell_machine1: { name: "Станок 1", responsible: "Иванов И.И.", status: "не работает", events: ["03.05-замена сверла"], canEdit: true, cellStyle: {} },
+        cell_table3: { name: "стол", responsible: "Не закреплен", status: "не работает", events: ["05.05-неисправность"], canEdit: true, cellStyle: {} },
+        cell_sold4: { name: "стол", responsible: "Иванов И.И.", status: "работает", events: ["16.05-обновление ПО"], canEdit: true, cellStyle: {} },
+        cell_sold6_1: { name: "стол", responsible: "Не закреплен", status: "не закреплен", events: ["—"], canEdit: true, cellStyle: {} },
         cell_passage_vertical2: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_storage_rack1: { name: "Стеллаж", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение", "19.05-учет", "14.05-чистка"], canEdit: true, cellStyle: {} },
-        cell_sold7: { name: "Паяльный стол 7", responsible: "Петров В.В.", status: "работает", events: ["23.05-калибровка", "17.05-замена сопла", "11.05-чистка"], canEdit: true, cellStyle: {} },
-        cell_conveyor1: { name: "Конвейер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка", "15.05-проверка", "08.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_operator2: { name: "Оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена", "15.05-инструктаж", "10.05-проверка"], canEdit: true, cellStyle: {} },
-        cell_storage_stand: { name: "Стенд хранения", responsible: "Кладовщик", status: "работает", events: ["22.05-пополнение", "18.05-уборка", "12.05-инвентаризация"], canEdit: true, cellStyle: {} },
-        cell_conveyor2: { name: "Конвейер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка", "15.05-проверка", "08.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_workplace1: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_workplace2: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_passage_horizontal: { name: "Центральный проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_work2: { name: "Рабочий 2", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_machine2: { name: "Станок 2", responsible: "Гаврилов Н.С.", status: "работает", events: ["18.05-смазка", "11.05-фреза", "01.05-проверка ЧПУ"], canEdit: true, cellStyle: {} },
-        cell_workplace3: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_workplace4: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_sold8: { name: "Паяльный стол 8", responsible: "Петров В.В.", status: "работает", events: ["25.05-обслуживание", "19.05-проверка", "14.05-замена"], canEdit: true, cellStyle: {} },
-        cell_sold9: { name: "Паяльный стол 9", responsible: "Не закреплен", status: "не закреплен", events: ["—", "—", "—"], canEdit: true, cellStyle: {} },
-        cell_conveyor3: { name: "Конвейер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка", "15.05-проверка", "08.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_operator3: { name: "Оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена", "15.05-инструктаж", "10.05-проверка"], canEdit: true, cellStyle: {} },
+        cell_storage_rack1: { name: "стелаж", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение"], canEdit: true, cellStyle: {} },
+        cell_sold7: { name: "стол", responsible: "Петров В.В.", status: "работает", events: ["23.05-калибровка"], canEdit: true, cellStyle: {} },
+        cell_conveyor1: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
+        cell_operator2: { name: "оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена"], canEdit: true, cellStyle: {} },
+        cell_storage_stand: { name: "стенд хранения", responsible: "Кладовщик", status: "работает", events: ["22.05-пополнение"], canEdit: true, cellStyle: {} },
+        cell_conveyor2: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
+        cell_workplace1: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
+        cell_workplace2: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
+        cell_passage_horizontal: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
+        cell_work2: { name: "Рабочий 2", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
+        cell_machine2: { name: "Станок 2", responsible: "Гаврилов Н.С.", status: "работает", events: ["18.05-смазка"], canEdit: true, cellStyle: {} },
+        cell_workplace3: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
+        cell_workplace4: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
+        cell_sold8: { name: "стол", responsible: "Петров В.В.", status: "работает", events: ["25.05-обслуживание"], canEdit: true, cellStyle: {} },
+        cell_sold9: { name: "стол", responsible: "Не закреплен", status: "не закреплен", events: ["—"], canEdit: true, cellStyle: {} },
+        cell_conveyor3: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
+        cell_operator3: { name: "оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена"], canEdit: true, cellStyle: {} },
         cell_passage_vertical3: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_conveyor4: { name: "Конвейер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка", "15.05-проверка", "08.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_workplace5: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_workplace6: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true, cellStyle: {} },
-        cell_room: { name: "Комната деда", responsible: "Дед Петрович", status: "работает", events: ["20.05-чай", "15.05-ремонт", "10.05-чистка"], canEdit: true, cellStyle: {} },
-        cell_otk1: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
-        cell_otk2: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
-        cell_otk3: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
+        cell_conveyor4: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
+        cell_workplace5: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
+        cell_workplace6: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
+        cell_room: { name: "комната деда", responsible: "Дед", status: "работает", events: ["20.05-чай"], canEdit: true, cellStyle: {} },
+        cell_otk1: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
+        cell_otk2: { name: "OTK", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
+        cell_otk3: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
         cell_passage_vertical4: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_storage_rack2: { name: "Стеллаж", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение", "19.05-учет", "14.05-чистка"], canEdit: true, cellStyle: {} },
-        cell_otk4: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
+        cell_storage_rack2: { name: "стелаж", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение"], canEdit: true, cellStyle: {} },
+        cell_otk4: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
         cell_passage_vertical5: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_room_jenya: { name: "Комната Женя", responsible: "Женя", status: "работает", events: ["21.05-уборка", "16.05-обед", "11.05-заказ"], canEdit: true, cellStyle: {} },
+        cell_room_jenya: { name: "Женя", responsible: "Женя", status: "работает", events: ["21.05-уборка"], canEdit: true, cellStyle: {} },
         cell_passage_vertical6: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_otk5: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
-        cell_otk6: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
-        cell_otk7: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
-        cell_otk8: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true, cellStyle: {} },
+        cell_otk5: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
+        cell_otk6: { name: "OTK", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
+        cell_otk7: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
+        cell_otk8: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
         cell_exit: { name: "ВЫХОД", responsible: "—", status: "—", events: [], canEdit: false },
         cell_passage_vertical7: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false }
     };
@@ -461,12 +455,8 @@
         if (saved) {
             objectsData = JSON.parse(saved);
             for (let key in defaultData) {
-                if (!objectsData[key]) {
-                    objectsData[key] = JSON.parse(JSON.stringify(defaultData[key]));
-                } else {
-                    // обеспечиваем наличие поля cellStyle
-                    if (!objectsData[key].cellStyle) objectsData[key].cellStyle = {};
-                }
+                if (!objectsData[key]) objectsData[key] = JSON.parse(JSON.stringify(defaultData[key]));
+                if (!objectsData[key].cellStyle) objectsData[key].cellStyle = {};
             }
         } else {
             objectsData = JSON.parse(JSON.stringify(defaultData));
@@ -483,7 +473,6 @@
         const obj = objectsData[cellId];
         if (!obj) return;
         
-        // Сброс инлайновых стилей, кроме тех, что заданы в cellStyle
         cell.style.width = '';
         cell.style.height = '';
         cell.style.padding = '';
@@ -520,23 +509,18 @@
         document.getElementById("modalStatus").innerHTML = obj.status;
         const eventsDiv = document.getElementById("modalEvents");
         if (obj.events && obj.events.length) {
-            let html = "";
-            obj.events.slice(0,3).forEach(ev => html += `<div class="event-item"> ${ev}</div>`);
-            eventsDiv.innerHTML = html;
+            eventsDiv.innerHTML = obj.events.slice(0,3).map(ev => `<div class="event-item"> ${ev}</div>`).join('');
         } else eventsDiv.innerHTML = "<div>— нет событий —</div>";
         
-        // Быстрая панель — всегда видна
         document.getElementById("quickPanel").style.display = "block";
         document.getElementById("quickFio").value = "";
         document.getElementById("quickReason").value = "";
         
-        // Редакторская панель — только при editMode
         const panel = document.getElementById("editPanel");
         if (editMode && obj.canEdit === true) {
             panel.style.display = "block";
             document.getElementById("statusSelect").value = obj.status;
             document.getElementById("responsibleInput").value = obj.responsible;
-            // Заполняем поля размеров
             const cs = obj.cellStyle || {};
             document.getElementById("cellWidth").value = cs.width ? parseInt(cs.width) : '';
             document.getElementById("cellHeight").value = cs.height ? parseInt(cs.height) : '';
@@ -553,115 +537,81 @@
         currentCellId = null;
     }
 
-    function updateResponsible(newResponsible) {
-        if (!currentCellId) return;
-        const obj = objectsData[currentCellId];
-        if (!obj || obj.canEdit === false) return;
-        if (newResponsible && newResponsible.trim() !== "") {
-            obj.responsible = newResponsible.trim();
-            saveData();
-            updateCellUI(currentCellId);
-            openModal(currentCellId);
-        }
-    }
-
-    function updateObject(newStatus, newEvent = null, clearEvents = false) {
-        if (!currentCellId) return;
-        const obj = objectsData[currentCellId];
-        if (!obj || obj.canEdit === false) return;
-        if (newStatus) obj.status = newStatus;
-        if (newEvent && newEvent.trim()) {
-            let evs = obj.events || [];
-            evs.unshift(newEvent.trim());
-            while (evs.length > 3) evs.pop();
-            obj.events = evs;
-        }
-        if (clearEvents) obj.events = [];
-        saveData();
-        updateCellUI(currentCellId);
-        openModal(currentCellId);
-    }
-
     function setupUI() {
-        const editBtn = document.getElementById("editModeBtn");
-        const warnSpan = document.getElementById("editWarning");
-        editBtn.onclick = () => {
+        document.getElementById("editModeBtn").onclick = () => {
             editMode = !editMode;
-            editBtn.classList.toggle("active", editMode);
-            editBtn.innerText = editMode ? "Режим правки (вкл)" : "Режим правки (выкл)";
-            warnSpan.style.display = editMode ? "inline-block" : "none";
+            document.getElementById("editModeBtn").classList.toggle("active", editMode);
+            document.getElementById("editModeBtn").innerText = editMode ? "Режим правки (вкл)" : "Режим правки (выкл)";
+            document.getElementById("editWarning").style.display = editMode ? "inline-block" : "none";
             if (currentCellId && document.getElementById("modal").style.display === "flex") {
                 const obj = objectsData[currentCellId];
-                const canEdit = obj && obj.canEdit === true;
-                document.getElementById("editPanel").style.display = (editMode && canEdit) ? "block" : "none";
+                document.getElementById("editPanel").style.display = (editMode && obj?.canEdit) ? "block" : "none";
             }
         };
         document.getElementById("closeModal").onclick = closeModal;
         window.onclick = (e) => { if (e.target === document.getElementById("modal")) closeModal(); };
 
-        // Быстрая отметка
         document.getElementById("quickSaveBtn").onclick = () => {
             const fio = document.getElementById("quickFio").value.trim();
             const reason = document.getElementById("quickReason").value.trim();
-            if (!fio && !reason) return alert("Введите хотя бы ФИО или причину");
-            if (!currentCellId) return;
+            if (!fio && !reason) return alert("Введите ФИО или причину");
             const obj = objectsData[currentCellId];
             if (!obj || obj.canEdit === false) return;
             if (fio) obj.responsible = fio;
             if (reason) {
-                let evs = obj.events || [];
-                evs.unshift(reason);
-                if (evs.length > 3) evs = evs.slice(0,3);
-                obj.events = evs;
+                obj.events = obj.events || [];
+                obj.events.unshift(reason);
+                if (obj.events.length > 3) obj.events = obj.events.slice(0,3);
             }
             saveData();
             updateCellUI(currentCellId);
-            // Очищаем поля, оставляем окно открытым для проверки
             document.getElementById("quickFio").value = '';
             document.getElementById("quickReason").value = '';
-            openModal(currentCellId); // обновит содержимое
+            openModal(currentCellId);
         };
 
-        // Редакторские кнопки
-        document.getElementById("saveStatusBtn").onclick = () => updateObject(document.getElementById("statusSelect").value);
+        document.getElementById("saveStatusBtn").onclick = () => {
+            const obj = objectsData[currentCellId];
+            if (obj) { obj.status = document.getElementById("statusSelect").value; saveData(); updateCellUI(currentCellId); openModal(currentCellId); }
+        };
         document.getElementById("addEventBtn").onclick = () => {
-            const ev = document.getElementById("newEventInput").value;
-            if (!ev.trim()) return alert("Введите событие");
-            updateObject(null, ev);
-            document.getElementById("newEventInput").value = "";
+            const ev = document.getElementById("newEventInput").value.trim();
+            if (!ev) return alert("Введите событие");
+            const obj = objectsData[currentCellId];
+            if (obj) {
+                obj.events = obj.events || [];
+                obj.events.unshift(ev);
+                if (obj.events.length > 3) obj.events = obj.events.slice(0,3);
+                saveData(); updateCellUI(currentCellId); openModal(currentCellId);
+                document.getElementById("newEventInput").value = "";
+            }
         };
         document.getElementById("deleteEventsBtn").onclick = () => {
-            if (confirm("Очистить все события?")) updateObject(null, null, true);
+            if (confirm("Очистить все события?")) {
+                const obj = objectsData[currentCellId];
+                if (obj) { obj.events = []; saveData(); updateCellUI(currentCellId); openModal(currentCellId); }
+            }
         };
         document.getElementById("saveResponsibleBtn").onclick = () => {
-            const newResp = document.getElementById("responsibleInput").value;
-            if (newResp.trim() === "") {
-                alert("Введите ФИО ответственного");
-                return;
-            }
-            updateResponsible(newResp);
+            const newResp = document.getElementById("responsibleInput").value.trim();
+            if (!newResp) return alert("Введите ФИО");
+            const obj = objectsData[currentCellId];
+            if (obj) { obj.responsible = newResp; saveData(); updateCellUI(currentCellId); openModal(currentCellId); }
         };
-
-        // Размеры ячеек
         document.getElementById("applyStyleBtn").onclick = () => {
             const obj = objectsData[currentCellId];
-            if (!obj || obj.canEdit === false) return;
+            if (!obj) return;
             obj.cellStyle = obj.cellStyle || {};
             obj.cellStyle.width = document.getElementById("cellWidth").value ? document.getElementById("cellWidth").value + 'px' : '';
             obj.cellStyle.height = document.getElementById("cellHeight").value ? document.getElementById("cellHeight").value + 'px' : '';
             obj.cellStyle.padding = document.getElementById("cellPadding").value;
-            saveData();
-            updateCellUI(currentCellId);
-            openModal(currentCellId);
+            saveData(); updateCellUI(currentCellId); openModal(currentCellId);
         };
-
         document.getElementById("resetStyleBtn").onclick = () => {
             const obj = objectsData[currentCellId];
-            if (!obj || obj.canEdit === false) return;
+            if (!obj) return;
             obj.cellStyle = {};
-            saveData();
-            updateCellUI(currentCellId);
-            openModal(currentCellId);
+            saveData(); updateCellUI(currentCellId); openModal(currentCellId);
         };
     }
 
