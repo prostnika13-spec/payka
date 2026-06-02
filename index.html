@@ -112,6 +112,7 @@
         .cell-otk { background-color: #FF0000; }
         .cell-storage { background-color: #FFFF00; }
         .cell-exit { background-color: #6c757d; }
+        .cell-table { background-color: #07fff3; }
 
         .status-badge {
             font-size: 0.7rem;
@@ -238,6 +239,7 @@
         <span><div class="color-box" style="background:#FFFF00;"></div> Склад / Стеллажи</span>
         <span><div class="color-box" style="background:#adb5bd;"></div> Проход / Выход / Станок</span>
         <span><div class="color-box" style="background:#008000;"></div> Рабочее место</span>
+        <span><div class="color-box" style="background:#07fff3;"></div>Стол</span>
     </div>
     <div class="toolbar">
         <div><strong>при клике на ячейку информация</strong></div>
@@ -268,8 +270,8 @@
         <tr>
             <td rowspan="2" id="cell_work1" class="cell-workstation">Рабочий 1</td>
             <td rowspan="2" id="cell_machine1" class="cell-machine">Станок 1</td>
-            <td id="cell_sold3" class="cell-workstation">Рабочее место</td>
-            <td id="cell_sold4" class="cell-workstation">Рабочее место</td>
+            <td id="cell_sold3" class="cell-table">стол</td>
+            <td id="cell_sold4" class="cell-table">стол</td>
             <td rowspan="2" id="cell_sold6_1" class="cell-soldering">стол</td>
             <td rowspan="5" colspan="1" id="cell_passage_vertical2" class="cell-passage">проход</td>
             <td rowspan="2" id="cell_storage_rack1" class="cell-storage">стелаж</td>
@@ -290,8 +292,8 @@
         </tr>
         <!-- РЯД 5 -->
         <tr>
-           <td rowspan="2" id="cell_work2" class="cell-workstation">Рабочий 1</td>
-            <td rowspan="2" id="cell_machine2" class="cell-machine">Станок 1</td>
+           <td rowspan="2" id="cell_work2" class="cell-workstation">Рабочий 2</td>
+            <td rowspan="2" id="cell_machine2" class="cell-machine">Станок 2</td>
             <td id="cell_workplace3" class="cell-workstation">Рабочее место</td>
             <td id="cell_workplace4" class="cell-workstation">Рабочее место</td>
             <td rowspan="2" id="cell_sold8" class="cell-soldering">стол</td>
@@ -409,7 +411,7 @@
         cell_conveyor4: { name: "Конвейер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка", "15.05-проверка", "08.05-настройка"], canEdit: true },
         cell_workplace5: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true },
         cell_workplace6: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы", "12.05-проверка света", "05.05-настройка"], canEdit: true },
-        cell_room: { name: "Комната деда", responsible: "Дед Петрович", status: "работает", events: ["20.05-чай", "15.05-ремонт", "10.05-чистка"], canEdit: true },
+        cell_room: { name: "Комната деда", responsible: "Дед", status: "работает", events: ["20.05-чай", "15.05-ремонт", "10.05-чистка"], canEdit: true },
         cell_otk1: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true },
         cell_otk2: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true },
         cell_otk3: { name: "Стол ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак", "14.05-поверка", "07.05-обучение"], canEdit: true },
