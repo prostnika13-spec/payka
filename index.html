@@ -2,622 +2,933 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Селективная пайка</title>
+    <title>Интерактивная карта участка Селективной пайки</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
             margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #000000;
-            margin-top: 0;
-        }
-        .legend {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            background: #f8f9fa;
-            padding: 12px 20px;
-            border-radius: 40px;
-            margin: 15px 0;
             justify-content: center;
-            font-size: 0.85rem;
-        }
-        .legend span {
-            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            min-height: 100vh;
         }
-        .color-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-        }
-        .map-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #fff;
-            margin: 20px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .map-table td {
-            border: 2px solid #ddd;
-            text-align: center;
-            vertical-align: middle;
-            padding: 18px 12px;
-            font-weight: 500;
-            color: white;
-            text-shadow: 0 0 2px black;
-        }
-        .map-table td.cell-passage {
-            width: 1%;
-            white-space: nowrap;
-            cursor: default;
-        }
-        .map-table td.cell-passage:hover {
-            filter: none;
-            transform: none;
-        }
-        .map-table td.cell-exit {
-            cursor: default;
-        }
-        .map-table td.cell-exit:hover {
-            filter: none;
-            transform: none;
-        }
-        .map-table td.cell-storage {
-            color: black;
-            text-shadow: none;
-            cursor: pointer;
-        }
-        .map-table td.cell-workstation {
-            cursor: pointer;
-        }
-        .map-table td.cell-machine {
-            cursor: pointer;
-        }
-        .map-table td.cell-soldering {
-            cursor: pointer;
-        }
-        .map-table td.cell-otk {
-            cursor: pointer;
-        }
-        .map-table td.cell-storage {
-            cursor: pointer;
-        }
-        .map-table td.cell-table {
-            cursor: pointer;
-        }
-        .map-table td:hover {
-            filter: brightness(0.9);
-            transform: scale(0.98);
-        }
-        .map-table td.cell-passage:hover, .map-table td.cell-exit:hover {
-            filter: none;
-            transform: none;
-        }
-        .cell-workstation { background-color: #008000; }
-        .cell-machine { background-color: #6c757d; }
-        .cell-soldering { background-color: #0000FF; }
-        .cell-passage { background-color: #adb5bd; }
-        .cell-otk { background-color: #FF0000; }
-        .cell-storage { background-color: #FFFF00; }
-        .cell-exit { background-color: #6c757d; }
-        .cell-table { background-color: #864d0b; }
 
-        .status-badge {
-            font-size: 0.7rem;
-            display: inline-block;
-            background: rgba(0,0,0,0.6);
-            border-radius: 20px;
-            padding: 2px 8px;
-            margin-top: 5px;
-            color: white;
-        }
-        .cell-storage .status-badge {
-            background: rgba(0,0,0,0.7);
-            color: white;
-        }
-        .cell-table .status-badge {
-            background: rgba(255,255,255,0.3);
-            color: white;
-        }
-        .toolbar {
+        .container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
         }
-        button {
-            background: #e9ecef;
-            border: 1px solid #adb5bd;
-            padding: 8px 18px;
-            border-radius: 40px;
+
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .legend {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px 30px;
+            display: flex;
+            gap: 40px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            align-items: center;
+            width: fit-content;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legend-color {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #555;
+        }
+        .legend-color.otk {
+            background: #B22222;
+        }
+        .legend-color.prohod {
+            background: #d3d3d3;
+            border: 1px solid #999;
+        }
+        .legend-color.equip {
+            background: #f4d03f;
+        }
+
+        .plan {
+            position: relative;
+            width: 1550px;
+            height: 920px;
+            margin: 0 auto;
+            background: #d3d3d3;
+            border: 2px solid #000;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .block {
+            position: absolute;
+            border: 1px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
             font-weight: bold;
+            padding: 2px;
+            box-sizing: border-box;
+            background: #ffffff;
+            font-size: 12px;
+            transition: 0.2s;
+            overflow: hidden;
+            color: #000;
         }
-        button.active {
-            background: #efe6d8;
-            border-color: #fff3db;
-            color: #000000;
+
+        .block.non-interactive {
+            cursor: default;
+            pointer-events: none;
         }
-        .warning {
-            background: #fff3cd;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 0.75rem;
+
+        .block:hover {
+            transform: scale(1.01);
+            z-index: 100;
+            background: #fff;
+            border: 2px solid #000;
         }
+
+        .block.no-hover-scale:hover {
+            transform: none;
+            z-index: auto;
+            border: 1px solid #333;
+            background: #fff;
+        }
+
+        .block.non-interactive:hover {
+            transform: none;
+            border: 1px solid #333;
+        }
+
+        .block.exit {
+            z-index: 200;
+            background: #ffffff;
+            border: 1px solid #333;
+            font-weight: bold;
+        }
+        .block.exit:hover {
+            transform: none;
+            border: 1px solid #333;
+        }
+
+        .work {
+            background: #ffffff;
+        }
+        .check {
+            background: #B22222;
+            color: white;
+        }
+        .stop {
+            background: #ffb3b3;
+        }
+        .prohod {
+            background: #d3d3d3;
+            border: none;
+            border-bottom: 1px solid #aaa;
+        }
+        .equip {
+            background: #f4d03f;
+        }
+
+        .no-center {
+            justify-content: flex-start;
+            align-items: flex-start;
+            text-align: left;
+            padding: 4px;
+        }
+
         .modal {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             justify-content: center;
+            align-items: center;
             z-index: 1000;
         }
+
         .modal-content {
-            background: #fffef7;
-            border-radius: 28px;
-            width: 400px;
-            max-width: 90%;
-            padding: 24px;
-            position: relative;
-            box-shadow: 0 20px 30px rgba(0,0,0,0.2);
-            border-left: 8px solid #f7b05e;
-            color: black;
-            text-shadow: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        .modal-close {
-            position: absolute;
-            right: 20px;
-            top: 15px;
-            font-size: 28px;
+
+        input, textarea, select {
+            width: 100%;
+            margin: 5px 0;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            gap: 12px;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .save {
+            background: #4caf50;
+        }
+        .save:hover {
+            background: #45a049;
+        }
+        .cancel {
+            background: #6c757d;
+        }
+        .cancel:hover {
+            background: #5a6268;
+        }
+        .edit-event-btn {
+            background: #ffc107;
+            color: #333;
+            font-size: 10px;
+            padding: 2px 8px;
+            margin-left: 8px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+        }
+        .edit-event-btn:hover {
+            background: #e0a800;
+        }
+        .delete-event-btn {
+            background: #dc3545;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            margin-left: 4px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+        }
+        .delete-event-btn:hover {
+            background: #c82333;
+        }
+        .edit-event-btn-disabled, .delete-event-btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .mode-badge {
+            background: #ddd;
+            color: #333;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            font-weight: normal;
+        }
+
+        .edit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .edit-header h3 {
+            margin: 0;
+        }
+        
+        .events-section {
+            margin: 15px 0 10px;
+        }
+        
+        .events-history {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 12px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        
+        .events-history-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+        }
+        
+        .event-item {
+            font-size: 11px;
+            padding: 6px 4px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .event-item:last-child {
+            border-bottom: none;
+        }
+        
+        .event-text {
+            flex: 1;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+        
+        .event-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        
+        .event-edit-input {
+            flex: 1;
+            font-size: 11px;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        
+        .event-save-btn {
+            background: #28a745;
+            color: white;
+            font-size: 10px;
+            padding: 3px 8px;
+            border: none;
+            border-radius: 3px;
             cursor: pointer;
         }
-        .event-list {
-            background: #f5f0e1;
-            border-radius: 16px;
-            padding: 10px;
-            margin: 15px 0;
-        }
-        .event-item {
-            border-bottom: 1px solid #e0d5b5;
-            padding: 6px 0;
-            font-size: 0.85rem;
-        }
-        .edit-panel {
-            margin-top: 15px;
-            border-top: 1px solid #e2d5b0;
-            padding-top: 15px;
-        }
-        select, input, .edit-panel button, .quick-panel button {
-            width: 100%;
-            margin: 6px 0;
-            padding: 8px;
-            border-radius: 40px;
-            border: 1px solid #ccc;
-            font-family: inherit;
-        }
-        .btn-save {
-            background: #f7bc6d;
+        
+        .new-event-label {
+            font-size: 12px;
             font-weight: bold;
-            border: none;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            color: #2c3e50;
         }
-        .btn-danger {
-            background: #f8d7da;
-            color: #a71d2a;
-            border-color: #f5c6cb;
+        
+        .new-event-textarea {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            resize: vertical;
         }
-        .quick-panel {
+        
+        .separator {
+            border-top: 1px solid #e0e0e0;
             margin: 12px 0;
-            padding: 10px 0;
-            border-top: 1px dashed #ccc;
-            border-bottom: 1px dashed #ccc;
         }
-        @media (max-width: 1000px) {
-            .container {
-                max-width: 95%;
-            }
-            .map-table td {
-                padding: 10px 4px;
-                font-size: 0.75rem;
-            }
-            .map-table td.cell-passage {
-                white-space: normal;
-            }
+        
+        .info-note {
+            font-size: 10px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .event-success-msg {
+            font-size: 11px;
+            color: #2e7d32;
+            margin-top: 6px;
+            text-align: center;
+            background: #e8f5e9;
+            border-radius: 4px;
+            padding: 4px;
+            display: none;
+        }
+        
+        .field-group {
+            margin-bottom: 10px;
+        }
+        
+        .field-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #444;
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .lock-note {
+            font-size: 10px;
+            color: #888;
+            margin-top: 6px;
+            text-align: center;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Интерактивная карта участка Селективной пайки</h1>
+    <div class="title">Интерактивная карта участка Селективной пайки</div>
+
     <div class="legend">
-        <span><div class="color-box" style="background:#0000FF;"></div> Паяльные столы</span>
-        <span><div class="color-box" style="background:#FF0000;"></div> ОТК</span>
-        <span><div class="color-box" style="background:#FFFF00;"></div> Склад / Стеллажи</span>
-        <span><div class="color-box" style="background:#adb5bd;"></div> Проход / Выход / Станок</span>
-        <span><div class="color-box" style="background:#008000;"></div> Рабочее место</span>
-        <span><div class="color-box" style="background:#864d0b;"></div> Стол</span>
-    </div>
-    <div class="toolbar">
-        <div><strong>при клике на ячейку информация</strong></div>
-        <div>
-            <button id="editModeBtn">Режим правки (выкл)</button>
-            <span id="editWarning" class="warning" style="display:none;">режим начальника</span>
+        <div class="legend-item">
+            <div class="legend-color otk"></div>
+            <span>ОТК</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color prohod"></div>
+            <span>Проход</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color equip"></div>
+            <span>Складские стеллажи</span>
         </div>
     </div>
 
-    <table class="map-table" id="mapTable">
-        <tr>
-            <td id="cell_lvj" class="cell-storage">ЛВЖ</td>
-            <td id="cell_shelving_main" class="cell-storage">палеты</td>
-            <td rowspan="9" colspan="1" id="cell_passage_vertical" class="cell-passage">проход</td>
-            <td id="cell_pallets1" class="cell-storage">стелаж</td>
-            <td id="cell_pallets2" class="cell-storage">стелаж</td>
-            <td id="cell_pallets3" class="cell-storage">стелаж</td>
-            <td id="cell_pallets4" class="cell-storage">стелаж</td>
-            <td id="cell_pallets5" class="cell-storage">стелаж</td>
-            <td id="cell_pallets6" class="cell-storage">стелаж</td>
-            <td id="cell_pallets7" class="cell-storage">стелаж</td>
-            <td id="cell_sold1" class="cell-workstation">раб. место |станок|</td>
-            <td id="cell_operator1" class="cell-workstation">оператор</td>
-            <td id="cell_storage_wall" class="cell-storage">стен.хранения</td>
-        </tr>
-        <tr>
-            <td rowspan="2" id="cell_work1" class="cell-workstation">Рабочий 1</td>
-            <td rowspan="2" id="cell_machine1" class="cell-machine">Станок 1</td>
-            <td id="cell_table3" class="cell-table">стол</td>
-            <td id="cell_sold4" class="cell-table">стол</td>
-            <td rowspan="2" id="cell_sold6_1" class="cell-soldering">стол</td>
-            <td rowspan="5" colspan="1" id="cell_passage_vertical2" class="cell-passage">проход</td>
-            <td rowspan="2" id="cell_storage_rack1" class="cell-storage">стелаж</td>
-            <td rowspan="2" id="cell_sold7" class="cell-soldering">стол</td>
-            <td colspan="2" id="cell_conveyor1" class="cell-soldering">конвеер</td>
-            <td rowspan="2" id="cell_operator2" class="cell-workstation">оператор</td>
-            <td rowspan="2" id="cell_storage_stand" class="cell-storage">стенд хранения</td>
-        </tr>
-        <tr>
-            <td colspan="2" id="cell_conveyor2" class="cell-soldering">конвеер</td>
-            <td id="cell_workplace1" class="cell-workstation">Рабочее место</td>
-            <td id="cell_workplace2" class="cell-workstation">Рабочее место</td>
-        </tr>
-        <tr>
-            <td colspan="13" id="cell_passage_horizontal" class="cell-passage"></td>
-        </tr>
-        <tr>
-           <td rowspan="2" id="cell_work2" class="cell-workstation">Рабочий 2</td>
-            <td rowspan="2" id="cell_machine2" class="cell-machine">Станок 2</td>
-            <td id="cell_workplace3" class="cell-workstation">Рабочее место</td>
-            <td id="cell_workplace4" class="cell-workstation">Рабочее место</td>
-            <td rowspan="2" id="cell_sold8" class="cell-table">стол</td>
-            <td rowspan="2" id="cell_sold9" class="cell-table">стол</td>
-            <td colspan="2" id="cell_conveyor3" class="cell-soldering">конвеер</td>
-            <td rowspan="2" id="cell_operator3" class="cell-workstation">оператор</td>
-            <td rowspan="2" colspan="2" id="cell_passage_vertical3" class="cell-passage">проход</td>
-        </tr>
-        <tr>
-            <td colspan="2" id="cell_conveyor4" class="cell-soldering">конвеер</td>
-            <td id="cell_workplace5" class="cell-workstation">Рабочее место</td>
-            <td id="cell_workplace6" class="cell-workstation">Рабочее место</td>
-        </tr>
-         <tr>
-           <td rowspan="2" colspan="2" id="cell_room" class="cell-soldering">комната деда</td>
-           <td id="cell_otk1" class="cell-otk">ОТК</td>
-            <td id="cell_otk2" class="cell-otk">OTK</td>
-            <td id="cell_otk3" class="cell-otk">ОТК</td>
-            <td rowspan="2" colspan="1" id="cell_passage_vertical4" class="cell-passage">проход</td>
-            <td rowspan="2" id="cell_storage_rack2" class="cell-storage">стелаж</td>
-            <td id="cell_otk4" class="cell-otk">ОТК</td>
-            <td rowspan="2" colspan="1" id="cell_passage_vertical5" class="cell-passage">проход</td>
-            <td rowspan="2" colspan="2" id="cell_room_jenya" class="cell-soldering">Женя</td>
-            <td rowspan="2" colspan="2" id="cell_passage_vertical6" class="cell-passage">проход</td>
-        </tr>
-        <tr>
-            <td id="cell_otk5" class="cell-otk">ОТК</td>
-            <td id="cell_otk6" class="cell-otk">OTK</td>
-            <td id="cell_otk7" class="cell-otk">ОТК</td>
-            <td id="cell_otk8" class="cell-otk">ОТК</td>
-        </tr>
-         <tr>
-            <td id="cell_exit" class="cell-exit">ВЫХОД</td>
-            <td colspan="15" id="cell_passage_vertical7" class="cell-passage">проход</td>
-        </tr>
-    </table>
-</div>
+    <div class="top-bar">
+        <button id="editModeBtn" style="background: #2c3e50; padding: 6px 18px; font-size: 12px;">Режим правки (выкл)</button>
+    </div>
 
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" id="closeModal">&times;</span>
-        <h3 id="modalTitle">Объект</h3>
-        <p><strong>Ответственный:</strong> <span id="modalResponsible">—</span></p>
-        <p><strong>Статус:</strong> <span id="modalStatus">—</span></p>
-        <div><strong>Последние 3 события:</strong></div>
-        <div id="modalEvents" class="event-list">—</div>
+    <div class="plan">
+        <!-- Шкафы и стеллажи -->
+        <div class="block" style="top: 0; left: 160px; width: 90px; height: 40px;" data-name="Шкаф ЛВЖ" data-resp="" data-status="work" data-type="equip" data-events="">Шкаф ЛВЖ</div>
+        <div class="block" style="top: 0; left: 310px; width: 90px; height: 40px;" data-name="Шкаф паллеты (1)" data-resp="" data-status="work" data-type="equip" data-events="">Шкаф паллеты</div>
+        <div class="block" style="top: 0; left: 400px; width: 90px; height: 40px;" data-name="Шкаф паллеты (2)" data-resp="" data-status="work" data-type="equip" data-events="">Шкаф паллеты</div>
+        <div class="block" style="top: 0; left: 490px; width: 90px; height: 40px;" data-name="Шкаф паллеты (3)" data-resp="" data-status="work" data-type="equip" data-events="">Шкаф паллеты</div>
+        <div class="block" style="top: 0; left: 650px; width: 70px; height: 40px;" data-name="Стеллаж (1)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 0; left: 720px; width: 70px; height: 40px;" data-name="Стеллаж (2)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 0; left: 790px; width: 70px; height: 40px;" data-name="Стеллаж (3)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 0; left: 860px; width: 70px; height: 40px;" data-name="Стеллаж (4)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 0; left: 930px; width: 70px; height: 40px;" data-name="Стеллаж (5)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 0; left: 1000px; width: 70px; height: 40px;" data-name="Стеллаж (6)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 0; left: 1070px; width: 70px; height: 40px;" data-name="Стеллаж (7)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 0px; left: 1450px; width: 70px; height: 40px;" data-name="Стеллаж (8)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 460px; left: 410px; width: 60px; height: 40px;" data-name="Стеллаж (9)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 460px; left: 550px; width: 60px; height: 40px;" data-name="Стеллаж (10)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 500px; left: 610px; width: 40px; height: 160px; display: flex; align-items: center; justify-content: center;" data-name="Стеллаж 11" data-resp="" data-status="work" data-type="equip" data-events=""><span style="transform: rotate(90deg); white-space: nowrap; display: inline-block;">Стеллаж</span></div>
+        <div class="block" style="top: 460px; left: 750px; width: 55px; height: 40px;" data-name="Стеллаж (12)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
+        <div class="block" style="top: 460px; left: 805px; width: 55px; height: 40px;" data-name="Стеллаж (13)" data-resp="" data-status="work" data-type="equip" data-events="">Стеллаж</div>
 
-        <div id="quickPanel" class="quick-panel">
-            <label><strong>Быстрая отметка:</strong></label>
-            <input type="text" id="quickFio" placeholder="Ваше ФИО">
-            <input type="text" id="quickReason" placeholder="Причина / событие">
-            <button id="quickSaveBtn" class="btn-save">Отметиться</button>
-        </div>
+        <!-- ОТК-->
+        <div class="block" style="top: 500px; left: 410px; width: 60px; height:80px;" data-name="Стол контроля ОТК (1)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
+        <div class="block" style="top: 580px; left: 410px; width: 60px; height:80px;" data-name="Стол контроля ОТК (2)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
+        <div class="block" style="top: 500px; left: 550px; width: 60px; height:80px;" data-name="Стол контроля ОТК (3)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
+        <div class="block" style="top: 580px; left: 550px; width: 60px; height:80px;" data-name="Стол контроля ОТК (4)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
+        <div class="block" style="top: 700px; left: 0px; width: 135px; height:50px;" data-name="Стол контроля ОТК (5)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
+        <div class="block" style="top: 700px; left: 135px; width: 135px; height:50px;" data-name="Стол контроля ОТК (6)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
+        <div class="block" style="top: 770px; left: 0px; width: 135px; height:50px;" data-name="Стол контроля ОТК (7)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
+        <div class="block" style="top: 770px; left: 135px; width: 135px; height:50px;" data-name="Стол контроля ОТК (8)" data-resp="" data-status="work" data-type="otk" data-events="">ОТК</div>
 
-        <div id="editPanel" style="display: none;">
-            <div class="edit-panel">
+        <!-- Выходы -->
+        <div class="block non-interactive exit" style="top: 390px; left: 0px; width: 20px; height: 70px; display: flex; align-items: center; justify-content: center;" data-name="Выход (1)" data-resp="" data-status="work" data-type="" data-events=""><span style="transform: rotate(90deg); white-space: nowrap; display: inline-block;">Выход</span></div>
+        <div class="block non-interactive exit" style="top: 835px; left: 0px; width: 20px; height: 70px; display: flex; align-items: center; justify-content: center;" data-name="Выход (2)" data-resp="" data-status="work" data-type="" data-events=""><span style="transform: rotate(90deg); white-space: nowrap; display: inline-block;">Выход</span></div>
+
+        <!-- Блок (1) -->
+        <div class="block non-interactive" style="top: 460px; left: 990px; width: 450px; height:200px;" data-name="Блок (1)" data-resp="" data-status="work" data-type="" data-events="">Блок</div>
+        
+        <div class="block non-interactive exit" style="top: 460px; left: 1050px; width: 50px; height:25px;" data-name="Выход (3)" data-resp="" data-status="work" data-type="" data-events="">Выход</div>
+        
+        <div class="block" style="top: 460px; left: 990px; width: 50px; height: 80px;" data-name="Шкаф (1)" data-resp="" data-status="work" data-type="equip" data-events="">Шкаф</div>
+        <div class="block" style="top: 550px; left: 1150px; width: 50px; height: 110px;" data-name="Шкаф (2)" data-resp="" data-status="work" data-type="equip" data-events="">Шкаф</div>
+        <div class="block" style="top: 460px; left: 1160px; width: 80px; height: 30px;" data-name="Шкаф (3)" data-resp="" data-status="work" data-type="equip" data-events="">Шкаф</div>
+
+        <!-- Остальные блоки -->
+        <div class="block no-center no-hover-scale" style="top: 0px; left: 1170px; width: 140px; height: 70px;" data-name="Рабочее место (1)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 0px; left: 1310px; width: 140px; height: 70px;" data-name="Рабочее место (2)" data-resp="" data-status="work" data-type="" data-events="">Оператор</div>
+        
+        <div class="block non-interactive" style="top: 30px; left: 1200px; width: 90px; height: 40px;" data-name="Станок сверления" data-resp="" data-status="work" data-type="" data-events="">Станок сверления</div>
+        
+        <div class="block" style="top: 110px; left: 30px; width: 80px; height:110px;" data-name="Оператор (2)" data-resp="" data-status="work" data-type="" data-events="">Оператор</div>
+        <div class="block" style="top: 250px; left: 30px; width: 80px; height:110px;" data-name="Оператор (3)" data-resp="" data-status="work" data-type="" data-events="">Оператор</div>
+        <div class="block" style="top: 110px; left: 110px; width: 300px; height:110px;" data-name="Установка(1)" data-resp="" data-status="work" data-type="" data-events="">Установка</div>
+        <div class="block" style="top: 250px; left: 110px; width: 300px; height:110px;" data-name="Установка(2)" data-resp="" data-status="work" data-type="" data-events="">Установка</div>
+        <div class="block" style="top: 140px; left: 410px; width: 200px; height:50px;" data-name="Конвейер(1)" data-resp="" data-status="work" data-type="" data-events="">Конвейер</div>
+        <div class="block" style="top: 190px; left: 410px; width: 100px; height:30px;" data-name="Рабочее место(3)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 190px; left: 510px; width: 100px; height:30px;" data-name="Рабочее место(4)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 130px; left: 610px; width: 35px; height:60px;" data-name="Мини стол(1)" data-resp="" data-status="work" data-type="" data-events="">Стол</div>
+        <div class="block" style="top: 250px; left: 410px; width: 100px; height:30px;" data-name="Рабочее место(5)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 250px; left: 510px; width: 100px; height:30px;" data-name="Рабочее место(6)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 280px; left: 410px; width: 200px; height:50px;" data-name="Конвейер(2)" data-resp="" data-status="work" data-type="" data-events="">Конвейер</div>
+        <div class="block" style="top: 280px; left: 610px; width: 35px; height:60px;" data-name="Мини стол(2)" data-resp="" data-status="work" data-type="" data-events="">Стол</div>
+        <div class="block" style="top: 110px; left: 1290px; width: 80px; height:110px;" data-name="Оператор (4)" data-resp="" data-status="work" data-type="" data-events="">Оператор</div>
+        <div class="block" style="top: 250px; left: 1415px; width: 80px; height:110px;" data-name="Оператор (5)" data-resp="" data-status="work" data-type="" data-events="">Оператор</div>
+        <div class="block" style="top: 110px; left: 990px; width: 300px; height:110px;" data-name="Установка(3)" data-resp="" data-status="work" data-type="" data-events="">Установка</div>
+        <div class="block" style="top: 250px; left: 1175px; width: 240px; height:110px;" data-name="Установка(4)" data-resp="" data-status="work" data-type="" data-events="">Установка</div>
+        <div class="block" style="top: 250px; left: 1100px; width: 75px; height:30px;" data-name="Рабочее место(7)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 250px; left: 1025px; width: 75px; height:30px;" data-name="Рабочее место(8)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 190px; left: 890px; width: 100px; height:30px;" data-name="Рабочее место(9)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 190px; left: 790px; width: 100px; height:30px;" data-name="Рабочее место(10)" data-resp="" data-status="work" data-type="" data-events="">Рабочее место</div>
+        <div class="block" style="top: 140px; left: 790px; width: 200px; height:50px;" data-name="Конвейер(3)" data-resp="" data-status="work" data-type="" data-events="">Конвейер</div>
+        <div class="block" style="top: 280px; left: 1025px; width: 150px; height:50px;" data-name="Конвейер(4)" data-resp="" data-status="work" data-type="" data-events="">Конвейер</div>
+        <div class="block" style="top: 130px; left: 755px; width: 35px; height:60px;" data-name="Мини стол(3)" data-resp="" data-status="work" data-type="" data-events="">Стол</div>
+        <div class="block" style="top: 280px; left: 990px; width: 35px; height:60px;" data-name="Мини стол(4)" data-resp="" data-status="work" data-type="" data-events="">Стол</div>
+        <div class="block" style="top: 580px; left: 750px; width: 55px; height:80px;" data-name="Слесарь(1)" data-resp="" data-status="work" data-type="" data-events="">Слесарь</div>
+        <div class="block" style="top: 500px; left: 750px; width: 55px; height:80px;" data-name="Слесарь(2)" data-resp="" data-status="work" data-type="" data-events="">Слесарь</div>
+        <div class="block" style="top: 500px; left: 805px; width: 55px; height:80px;" data-name="Слесарь(3)" data-resp="" data-status="work" data-type="" data-events="">Слесарь</div>
+        <div class="block" style="top: 580px; left: 805px; width: 55px; height:80px;" data-name="Слесарь(4)" data-resp="" data-status="work" data-type="" data-events="">Слесарь</div>
+        <div class="block" style="top: 460px; left: 935px; width: 55px; height:100px;" data-name="Слесарь(5)" data-resp="" data-status="work" data-type="" data-events="">Слесарь</div>
+        <div class="block" style="top: 560px; left: 935px; width: 55px; height:100px;" data-name="Слесарь(6)" data-resp="" data-status="work" data-type="" data-events="">Слесарь</div>
+        
+        <div class="block non-interactive" style="top: 550px; left: 0px; width: 300px; height:150px;" data-name="Блок (2)" data-resp="" data-status="work" data-type="" data-events="">Блок</div>
+        
+        <div class="block" style="top: 550px; left: 990px; width: 50px; height: 100px;" data-name="Стол (1)" data-resp="" data-status="work" data-type="" data-events="">Стол</div>
+        <div class="block" style="top: 620px; left: 1050px; width: 100px; height: 40px;" data-name="Стол (2)" data-resp="" data-status="work" data-type="" data-events="">Стол</div>
+        <div class="block" style="top:540px; left: 1200px; width: 50px; height: 120px;" data-name="Стол (3)" data-resp="" data-status="work" data-type="" data-events="">Стол</div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="edit-header">
+                <h3>Редактирование блока</h3>
+                <span id="modeBadge" class="mode-badge">только события</span>
+            </div>
+            
+            <div class="field-group">
+                <label>Название:</label>
+                <input type="text" id="blockName" placeholder="Название">
+            </div>
+            <div class="field-group">
                 <label>Ответственный:</label>
-                <input type="text" id="responsibleInput" placeholder="ФИО ответственного" value="">
-                <button id="saveResponsibleBtn" class="btn-save">Сохранить ответственного</button>
-                <hr>
-                <label>Изменить статус:</label>
+                <input type="text" id="responsible" placeholder="Ответственный">
+            </div>
+            <div class="field-group">
+                <label>Статус:</label>
                 <select id="statusSelect">
-                    <option value="работает">работает</option>
-                    <option value="не работает">не работает</option>
-                    <option value="не закреплен">не закреплен</option>
+                    <option value="work">Работает</option>
+                    <option value="not_work">Не работает</option>
+                    <option value="idle">Пустует</option>
+                    <option value="repair">В ремонте</option>
                 </select>
-                <label>Добавить событие (дата + действие):</label>
-                <input type="text" id="newEventInput" placeholder="например: 27.05-замена паяльника">
-                <button id="addEventBtn" class="btn-save">Добавить событие</button>
-                <button id="saveStatusBtn" class="btn-save">Сохранить статус</button>
-                <hr>
-                <button id="deleteEventsBtn" class="btn-danger">Очистить все события</button>
-                <hr>
-                <label><strong> Размеры ячейки (px):</strong></label>
-                <input type="number" id="cellWidth" placeholder="Ширина (px)">
-                <input type="number" id="cellHeight" placeholder="Высота (px)">
-                <input type="text" id="cellPadding" placeholder="Отступы (например: 10 или 5 10)">
-                <button id="applyStyleBtn" class="btn-save">Применить размеры</button>
-                <button id="resetStyleBtn" class="btn-danger">Сбросить размеры</button>
+            </div>
+            
+            <div class="events-section">
+                <div class="events-history">
+                    <div class="events-history-label">История событий (последние 3)</div>
+                    <div id="eventsListContainer" class="events-history-list"></div>
+                </div>
+                
+                <div class="separator"></div>
+                
+                <div class="new-event-label">Новое событие</div>
+                <textarea id="newEventInput" rows="2" class="new-event-textarea" placeholder="Введите описание события. Время будет добавлено автоматически."></textarea>
+                <div id="successMessage" class="event-success-msg">Событие добавлено</div>
+                <div id="lockNote" class="lock-note"></div>
+            </div>
+            
+            <div class="buttons">
+                <button class="save" id="saveBtn">Сохранить</button>
+                <button class="cancel" id="cancelBtn">Закрыть</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const defaultData = {
-        cell_lvj: { name: "ЛВЖ", responsible: "Кладовщик Петров", status: "работает", events: ["25.05-проверка"], canEdit: true, cellStyle: {} },
-        cell_shelving_main: { name: "палеты", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение"], canEdit: true, cellStyle: {} },
-        cell_passage_vertical: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_pallets1: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
-        cell_pallets2: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
-        cell_pallets3: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
-        cell_pallets4: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
-        cell_pallets5: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
-        cell_pallets6: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
-        cell_pallets7: { name: "стелаж", responsible: "Логист", status: "работает", events: ["26.05-приход"], canEdit: true, cellStyle: {} },
-        cell_sold1: { name: "раб. место |станок|", responsible: "Иванов И.И.", status: "работает", events: ["19.05-калибровка"], canEdit: true, cellStyle: {} },
-        cell_operator1: { name: "оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена"], canEdit: true, cellStyle: {} },
-        cell_storage_wall: { name: "стен.хранения", responsible: "Кладовщик", status: "работает", events: ["22.05-пополнение"], canEdit: true, cellStyle: {} },
-        cell_work1: { name: "Рабочий 1", responsible: "Иванов И.И.", status: "работает", events: ["02.05-компьютер"], canEdit: true, cellStyle: {} },
-        cell_machine1: { name: "Станок 1", responsible: "Иванов И.И.", status: "не работает", events: ["03.05-замена сверла"], canEdit: true, cellStyle: {} },
-        cell_table3: { name: "стол", responsible: "Не закреплен", status: "не работает", events: ["05.05-неисправность"], canEdit: true, cellStyle: {} },
-        cell_sold4: { name: "стол", responsible: "Иванов И.И.", status: "работает", events: ["16.05-обновление ПО"], canEdit: true, cellStyle: {} },
-        cell_sold6_1: { name: "стол", responsible: "Не закреплен", status: "не закреплен", events: ["—"], canEdit: true, cellStyle: {} },
-        cell_passage_vertical2: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_storage_rack1: { name: "стелаж", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение"], canEdit: true, cellStyle: {} },
-        cell_sold7: { name: "стол", responsible: "Петров В.В.", status: "работает", events: ["23.05-калибровка"], canEdit: true, cellStyle: {} },
-        cell_conveyor1: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
-        cell_operator2: { name: "оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена"], canEdit: true, cellStyle: {} },
-        cell_storage_stand: { name: "стенд хранения", responsible: "Кладовщик", status: "работает", events: ["22.05-пополнение"], canEdit: true, cellStyle: {} },
-        cell_conveyor2: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
-        cell_workplace1: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
-        cell_workplace2: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
-        cell_passage_horizontal: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_work2: { name: "Рабочий 2", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
-        cell_machine2: { name: "Станок 2", responsible: "Гаврилов Н.С.", status: "работает", events: ["18.05-смазка"], canEdit: true, cellStyle: {} },
-        cell_workplace3: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
-        cell_workplace4: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
-        cell_sold8: { name: "стол", responsible: "Петров В.В.", status: "работает", events: ["25.05-обслуживание"], canEdit: true, cellStyle: {} },
-        cell_sold9: { name: "стол", responsible: "Не закреплен", status: "не закреплен", events: ["—"], canEdit: true, cellStyle: {} },
-        cell_conveyor3: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
-        cell_operator3: { name: "оператор", responsible: "Петров В.В.", status: "работает", events: ["20.05-смена"], canEdit: true, cellStyle: {} },
-        cell_passage_vertical3: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_conveyor4: { name: "конвеер", responsible: "Сидоров А.А.", status: "работает", events: ["21.05-смазка"], canEdit: true, cellStyle: {} },
-        cell_workplace5: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
-        cell_workplace6: { name: "Рабочее место", responsible: "Егорова Л.С.", status: "работает", events: ["20.05-получены схемы"], canEdit: true, cellStyle: {} },
-        cell_room: { name: "комната деда", responsible: "Дед", status: "работает", events: ["20.05-чай"], canEdit: true, cellStyle: {} },
-        cell_otk1: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_otk2: { name: "OTK", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_otk3: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_passage_vertical4: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_storage_rack2: { name: "стелаж", responsible: "Кладовщик", status: "работает", events: ["24.05-пополнение"], canEdit: true, cellStyle: {} },
-        cell_otk4: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_passage_vertical5: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_room_jenya: { name: "Женя", responsible: "Женя", status: "работает", events: ["21.05-уборка"], canEdit: true, cellStyle: {} },
-        cell_passage_vertical6: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_otk5: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_otk6: { name: "OTK", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_otk7: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_otk8: { name: "ОТК", responsible: "Васильева И.П.", status: "работает", events: ["22.05-выявлен брак"], canEdit: true, cellStyle: {} },
-        cell_exit: { name: "ВЫХОД", responsible: "—", status: "—", events: [], canEdit: false },
-        cell_passage_vertical7: { name: "Проход", responsible: "—", status: "—", events: [], canEdit: false }
-    };
-
-    let objectsData = {};
-    let editMode = false;
-    let currentCellId = null;
-
-    function loadData() {
-        const saved = localStorage.getItem("solderingFinal");
-        if (saved) {
-            objectsData = JSON.parse(saved);
-            for (let key in defaultData) {
-                if (!objectsData[key]) objectsData[key] = JSON.parse(JSON.stringify(defaultData[key]));
-                if (!objectsData[key].cellStyle) objectsData[key].cellStyle = {};
-            }
-        } else {
-            objectsData = JSON.parse(JSON.stringify(defaultData));
-        }
-    }
-
-    function saveData() {
-        localStorage.setItem("solderingFinal", JSON.stringify(objectsData));
-    }
-
-    function updateCellUI(cellId) {
-        const cell = document.getElementById(cellId);
-        if (!cell) return;
-        const obj = objectsData[cellId];
-        if (!obj) return;
-        
-        cell.style.width = '';
-        cell.style.height = '';
-        cell.style.padding = '';
-        if (obj.cellStyle) {
-            if (obj.cellStyle.width) cell.style.width = obj.cellStyle.width;
-            if (obj.cellStyle.height) cell.style.height = obj.cellStyle.height;
-            if (obj.cellStyle.padding) cell.style.padding = obj.cellStyle.padding;
-        }
-
-        if (obj.canEdit === false) {
-            cell.innerHTML = obj.name;
-            cell.onclick = null;
-            cell.style.cursor = "default";
-        } else {
-            cell.innerHTML = `${obj.name}<br><span class="status-badge">${obj.status}</span>`;
-            cell.onclick = () => openModal(cellId);
-            cell.style.cursor = "pointer";
-        }
-    }
-
-    function renderAll() {
-        for (let id in objectsData) {
-            if (document.getElementById(id)) updateCellUI(id);
-        }
-    }
-
-    function openModal(cellId) {
-        const obj = objectsData[cellId];
-        if (!obj || obj.canEdit === false) return;
-        
-        currentCellId = cellId;
-        document.getElementById("modalTitle").innerText = obj.name;
-        document.getElementById("modalResponsible").innerText = obj.responsible;
-        document.getElementById("modalStatus").innerHTML = obj.status;
-        const eventsDiv = document.getElementById("modalEvents");
-        if (obj.events && obj.events.length) {
-            eventsDiv.innerHTML = obj.events.slice(0,3).map(ev => `<div class="event-item"> ${ev}</div>`).join('');
-        } else eventsDiv.innerHTML = "<div>— нет событий —</div>";
-        
-        document.getElementById("quickPanel").style.display = "block";
-        document.getElementById("quickFio").value = "";
-        document.getElementById("quickReason").value = "";
-        
-        const panel = document.getElementById("editPanel");
-        if (editMode && obj.canEdit === true) {
-            panel.style.display = "block";
-            document.getElementById("statusSelect").value = obj.status;
-            document.getElementById("responsibleInput").value = obj.responsible;
-            const cs = obj.cellStyle || {};
-            document.getElementById("cellWidth").value = cs.width ? parseInt(cs.width) : '';
-            document.getElementById("cellHeight").value = cs.height ? parseInt(cs.height) : '';
-            document.getElementById("cellPadding").value = cs.padding || '';
-        } else {
-            panel.style.display = "none";
+    (function() {
+        // Проверка поддержки localStorage
+        var storageSupported = true;
+        try {
+            var testKey = '__test__';
+            localStorage.setItem(testKey, '1');
+            localStorage.removeItem(testKey);
+        } catch(e) {
+            storageSupported = false;
+            console.warn('localStorage не поддерживается или отключён. Данные не будут сохраняться.');
         }
         
-        document.getElementById("modal").style.display = "flex";
-    }
-
-    function closeModal() {
-        document.getElementById("modal").style.display = "none";
-        currentCellId = null;
-    }
-
-    function setupUI() {
-        document.getElementById("editModeBtn").onclick = () => {
-            editMode = !editMode;
-            document.getElementById("editModeBtn").classList.toggle("active", editMode);
-            document.getElementById("editModeBtn").innerText = editMode ? "Режим правки (вкл)" : "Режим правки (выкл)";
-            document.getElementById("editWarning").style.display = editMode ? "inline-block" : "none";
-            if (currentCellId && document.getElementById("modal").style.display === "flex") {
-                const obj = objectsData[currentCellId];
-                document.getElementById("editPanel").style.display = (editMode && obj?.canEdit) ? "block" : "none";
+        var blocks = document.querySelectorAll('.block');
+        var modal = document.getElementById('modal');
+        var blockNameInput = document.getElementById('blockName');
+        var responsibleInput = document.getElementById('responsible');
+        var statusSelect = document.getElementById('statusSelect');
+        var newEventInput = document.getElementById('newEventInput');
+        var eventsListContainer = document.getElementById('eventsListContainer');
+        var saveBtn = document.getElementById('saveBtn');
+        var cancelBtn = document.getElementById('cancelBtn');
+        var editModeBtn = document.getElementById('editModeBtn');
+        var modeBadge = document.getElementById('modeBadge');
+        var successMessage = document.getElementById('successMessage');
+        var lockNote = document.getElementById('lockNote');
+        
+        var currentBlock = null;
+        var editMode = false;
+        var STORAGE_KEY = 'selective_soldering_map';
+        
+        function saveAllToLocalStorage() {
+            if (!storageSupported) return;
+            var allData = [];
+            for (var i = 0; i < blocks.length; i++) {
+                var block = blocks[i];
+                allData.push({
+                    name: block.getAttribute('data-name'),
+                    resp: block.getAttribute('data-resp'),
+                    status: block.getAttribute('data-status'),
+                    events: block.getAttribute('data-events')
+                });
             }
-        };
-        document.getElementById("closeModal").onclick = closeModal;
-        window.onclick = (e) => { if (e.target === document.getElementById("modal")) closeModal(); };
-
-        document.getElementById("quickSaveBtn").onclick = () => {
-            const fio = document.getElementById("quickFio").value.trim();
-            const reason = document.getElementById("quickReason").value.trim();
-            if (!fio && !reason) return alert("Введите ФИО или причину");
-            const obj = objectsData[currentCellId];
-            if (!obj || obj.canEdit === false) return;
-            if (fio) obj.responsible = fio;
-            if (reason) {
-                obj.events = obj.events || [];
-                obj.events.unshift(reason);
-                if (obj.events.length > 3) obj.events = obj.events.slice(0,3);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+        }
+        
+        function loadAllFromLocalStorage() {
+            if (!storageSupported) return false;
+            var saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return false;
+            try {
+                var allData = JSON.parse(saved);
+                if (allData.length === blocks.length) {
+                    for (var i = 0; i < blocks.length; i++) {
+                        var block = blocks[i];
+                        var data = allData[i];
+                        block.setAttribute('data-name', data.name);
+                        block.setAttribute('data-resp', data.resp);
+                        block.setAttribute('data-status', data.status);
+                        block.setAttribute('data-events', data.events);
+                        applyClasses(block);
+                    }
+                    return true;
+                }
+            } catch(e) {}
+            return false;
+        }
+        
+        function getFullEventsHistory(block) {
+            var eventsStr = block.getAttribute('data-events') || '';
+            if (!eventsStr) return [];
+            return eventsStr.split('||').filter(function(e) { return e.trim().length > 0; });
+        }
+        
+        function setFullEventsHistory(block, eventsArray) {
+            var limited = eventsArray.slice(-20);
+            block.setAttribute('data-events', limited.join('||'));
+            saveAllToLocalStorage();
+        }
+        
+        function getLastEvents(block, count) {
+            count = count || 3;
+            var history = getFullEventsHistory(block);
+            return history.slice(-count);
+        }
+        
+        function addNewEvent(block, newEventText) {
+            if (!newEventText || newEventText.trim() === '') return false;
+            
+            var lines = newEventText.split(/\r?\n/).filter(function(line) { return line.trim().length > 0; });
+            if (lines.length === 0) return false;
+            
+            var history = getFullEventsHistory(block);
+            var addedCount = 0;
+            var now = new Date();
+            var timestamp = now.toLocaleString('ru-RU', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                day: '2-digit',
+                month: '2-digit'
+            });
+            
+            for (var i = 0; i < lines.length; i++) {
+                var eventWithTime = '[' + timestamp + '] ' + lines[i].trim();
+                history.push(eventWithTime);
+                addedCount++;
             }
-            saveData();
-            updateCellUI(currentCellId);
-            document.getElementById("quickFio").value = '';
-            document.getElementById("quickReason").value = '';
-            openModal(currentCellId);
-        };
-
-        document.getElementById("saveStatusBtn").onclick = () => {
-            const obj = objectsData[currentCellId];
-            if (obj) { obj.status = document.getElementById("statusSelect").value; saveData(); updateCellUI(currentCellId); openModal(currentCellId); }
-        };
-        document.getElementById("addEventBtn").onclick = () => {
-            const ev = document.getElementById("newEventInput").value.trim();
-            if (!ev) return alert("Введите событие");
-            const obj = objectsData[currentCellId];
-            if (obj) {
-                obj.events = obj.events || [];
-                obj.events.unshift(ev);
-                if (obj.events.length > 3) obj.events = obj.events.slice(0,3);
-                saveData(); updateCellUI(currentCellId); openModal(currentCellId);
-                document.getElementById("newEventInput").value = "";
+            
+            setFullEventsHistory(block, history);
+            return addedCount;
+        }
+        
+        function updateEvent(block, index, newText) {
+            var history = getFullEventsHistory(block);
+            if (index >= 0 && index < history.length && newText.trim()) {
+                var timestampMatch = history[index].match(/^(\[[^\]]+\])\s*/);
+                var timestamp = timestampMatch ? timestampMatch[1] : '[' + new Date().toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) + ']';
+                history[index] = timestamp + ' ' + newText.trim();
+                setFullEventsHistory(block, history);
+                return true;
             }
-        };
-        document.getElementById("deleteEventsBtn").onclick = () => {
-            if (confirm("Очистить все события?")) {
-                const obj = objectsData[currentCellId];
-                if (obj) { obj.events = []; saveData(); updateCellUI(currentCellId); openModal(currentCellId); }
+            return false;
+        }
+        
+        function deleteEvent(block, index) {
+            var history = getFullEventsHistory(block);
+            if (index >= 0 && index < history.length) {
+                history.splice(index, 1);
+                setFullEventsHistory(block, history);
+                return true;
             }
-        };
-        document.getElementById("saveResponsibleBtn").onclick = () => {
-            const newResp = document.getElementById("responsibleInput").value.trim();
-            if (!newResp) return alert("Введите ФИО");
-            const obj = objectsData[currentCellId];
-            if (obj) { obj.responsible = newResp; saveData(); updateCellUI(currentCellId); openModal(currentCellId); }
-        };
-        document.getElementById("applyStyleBtn").onclick = () => {
-            const obj = objectsData[currentCellId];
-            if (!obj) return;
-            obj.cellStyle = obj.cellStyle || {};
-            obj.cellStyle.width = document.getElementById("cellWidth").value ? document.getElementById("cellWidth").value + 'px' : '';
-            obj.cellStyle.height = document.getElementById("cellHeight").value ? document.getElementById("cellHeight").value + 'px' : '';
-            obj.cellStyle.padding = document.getElementById("cellPadding").value;
-            saveData(); updateCellUI(currentCellId); openModal(currentCellId);
-        };
-        document.getElementById("resetStyleBtn").onclick = () => {
-            const obj = objectsData[currentCellId];
-            if (!obj) return;
-            obj.cellStyle = {};
-            saveData(); updateCellUI(currentCellId); openModal(currentCellId);
-        };
-    }
-
-    loadData();
-    renderAll();
-    setupUI();
+            return false;
+        }
+        
+        function renderEvents() {
+            if (!currentBlock) return;
+            
+            var lastEvents = getLastEvents(currentBlock, 3);
+            var fullHistory = getFullEventsHistory(currentBlock);
+            var startIndex = Math.max(0, fullHistory.length - 3);
+            
+            if (lastEvents.length === 0) {
+                eventsListContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 8px;">— нет событий —</div>';
+                return;
+            }
+            
+            eventsListContainer.innerHTML = '';
+            for (var idx = 0; idx < lastEvents.length; idx++) {
+                var event = lastEvents[idx];
+                var actualIndex = startIndex + idx;
+                var eventDiv = document.createElement('div');
+                eventDiv.className = 'event-item';
+                
+                var eventTextSpan = document.createElement('span');
+                eventTextSpan.className = 'event-text';
+                eventTextSpan.textContent = event;
+                
+                var actionsDiv = document.createElement('div');
+                actionsDiv.className = 'event-actions';
+                
+                var editBtn = document.createElement('button');
+                editBtn.textContent = 'ред.';
+                editBtn.className = 'edit-event-btn';
+                editBtn.title = 'Редактировать событие';
+                
+                var deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'уд.';
+                deleteBtn.className = 'delete-event-btn';
+                deleteBtn.title = 'Удалить событие';
+                
+                if (!editMode) {
+                    editBtn.classList.add('edit-event-btn-disabled');
+                    deleteBtn.classList.add('delete-event-btn-disabled');
+                    editBtn.disabled = true;
+                    deleteBtn.disabled = true;
+                } else {
+                    editBtn.disabled = false;
+                    deleteBtn.disabled = false;
+                }
+                
+                var isEditing = false;
+                var self = this;
+                
+                editBtn.onclick = (function(ev, actualIdx, eventText) {
+                    return function() {
+                        if (!editMode) return;
+                        if (isEditing) return;
+                        isEditing = true;
+                        
+                        var originalText = eventText.replace(/^\[[^\]]+\]\s*/, '');
+                        var input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = originalText;
+                        input.className = 'event-edit-input';
+                        
+                        var saveEditBtn = document.createElement('button');
+                        saveEditBtn.textContent = 'сохранить';
+                        saveEditBtn.className = 'event-save-btn';
+                        
+                        eventDiv.innerHTML = '';
+                        eventDiv.appendChild(input);
+                        eventDiv.appendChild(saveEditBtn);
+                        
+                        saveEditBtn.onclick = function() {
+                            if (input.value.trim()) {
+                                updateEvent(currentBlock, actualIdx, input.value);
+                                renderEvents();
+                            }
+                        };
+                        
+                        input.addEventListener('keypress', function(e) {
+                            if (e.key === 'Enter') {
+                                saveEditBtn.click();
+                            }
+                        });
+                        
+                        input.focus();
+                    };
+                })(event, actualIndex, event);
+                
+                deleteBtn.onclick = (function(actualIdx) {
+                    return function() {
+                        if (!editMode) return;
+                        if (confirm('Удалить это событие?')) {
+                            deleteEvent(currentBlock, actualIdx);
+                            renderEvents();
+                        }
+                    };
+                })(actualIndex);
+                
+                actionsDiv.appendChild(editBtn);
+                actionsDiv.appendChild(deleteBtn);
+                eventDiv.appendChild(eventTextSpan);
+                eventDiv.appendChild(actionsDiv);
+                eventsListContainer.appendChild(eventDiv);
+            }
+        }
+        
+        function applyClasses(block) {
+            block.classList.remove('work', 'check', 'stop', 'equip', 'prohod', 'no-center');
+            
+            var type = block.getAttribute('data-type');
+            var status = block.getAttribute('data-status');
+            var name = block.getAttribute('data-name');
+            
+            if (name === 'Рабочее место (1)') {
+                block.classList.add('no-center');
+            }
+            
+            if (status === 'not_work' || status === 'idle' || status === 'repair') {
+                block.classList.add('stop');
+            } else if (type === 'equip') {
+                block.classList.add('equip');
+            } else if (type === 'otk') {
+                block.classList.add('check');
+            } else if (type === 'prohod') {
+                block.classList.add('prohod');
+            } else {
+                block.classList.add('work');
+            }
+        }
+        
+        function updateModalFieldsState() {
+            if (editMode) {
+                blockNameInput.readOnly = false;
+                responsibleInput.readOnly = false;
+                statusSelect.disabled = false;
+                blockNameInput.style.backgroundColor = '#ffffff';
+                responsibleInput.style.backgroundColor = '#ffffff';
+                modeBadge.innerText = 'режим правки';
+                modeBadge.style.background = '#ffc107';
+            } else {
+                blockNameInput.readOnly = true;
+                responsibleInput.readOnly = true;
+                statusSelect.disabled = true;
+                blockNameInput.style.backgroundColor = '#f5f5f5';
+                responsibleInput.style.backgroundColor = '#f5f5f5';
+                modeBadge.innerText = 'только события';
+                modeBadge.style.background = '#ddd';
+                lockNote.innerHTML = '';
+                lockNote.style.padding = '0';
+            }
+        }
+        
+        function openModal(block) {
+            currentBlock = block;
+            blockNameInput.value = block.getAttribute('data-name') || '';
+            responsibleInput.value = block.getAttribute('data-resp') || '';
+            var statusVal = block.getAttribute('data-status') || 'work';
+            if (statusVal !== 'work' && statusVal !== 'not_work' && statusVal !== 'idle' && statusVal !== 'repair') {
+                statusVal = 'work';
+            }
+            statusSelect.value = statusVal;
+            
+            newEventInput.value = '';
+            successMessage.style.display = 'none';
+            
+            renderEvents();
+            updateModalFieldsState();
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+            currentBlock = null;
+            successMessage.style.display = 'none';
+        }
+        
+        function saveChanges() {
+            if (!currentBlock) return;
+            
+            var newEventText = newEventInput.value;
+            if (newEventText.trim().length > 0) {
+                var added = addNewEvent(currentBlock, newEventText);
+                if (added > 0) {
+                    newEventInput.value = '';
+                    renderEvents();
+                    successMessage.style.display = 'block';
+                    setTimeout(function() {
+                        successMessage.style.display = 'none';
+                    }, 2000);
+                }
+            }
+            
+            if (editMode) {
+                currentBlock.setAttribute('data-name', blockNameInput.value);
+                currentBlock.setAttribute('data-resp', responsibleInput.value);
+                var newStatus = statusSelect.value;
+                currentBlock.setAttribute('data-status', newStatus);
+                saveAllToLocalStorage();
+            }
+            
+            applyClasses(currentBlock);
+        }
+        
+        function toggleEditMode() {
+            if (!editMode) {
+                alert("Внимание! Не баловаться.");
+                editMode = true;
+                editModeBtn.textContent = "Режим правки (вкл)";
+                editModeBtn.style.background = "#c2410c";
+            } else {
+                editMode = false;
+                editModeBtn.textContent = "Режим правки (выкл)";
+                editModeBtn.style.background = "#2c3e50";
+            }
+            if (currentBlock && modal.style.display === 'flex') {
+                renderEvents();
+                updateModalFieldsState();
+            }
+        }
+        
+        loadAllFromLocalStorage();
+        
+        for (var i = 0; i < blocks.length; i++) {
+            var block = blocks[i];
+            applyClasses(block);
+            if (block.classList.contains('non-interactive')) {
+                continue;
+            }
+            block.addEventListener('click', (function(b) {
+                return function() { openModal(b); };
+            })(block));
+        }
+        
+        saveBtn.addEventListener('click', saveChanges);
+        cancelBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+        editModeBtn.addEventListener('click', toggleEditMode);
+    })();
 </script>
 </body>
 </html>
